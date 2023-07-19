@@ -1,0 +1,9 @@
+{
+    "name": "QuickIronWeb",
+    "version": "0.0.1",
+    "description": "Western 2D quick-draw game",
+    "dependencies": {
+        "express": "^4.18.2",
+        "socket.io": "^4.7.1"
+    }
+}

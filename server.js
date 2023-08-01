@@ -8,7 +8,7 @@ const io = new Server(server);
 // add static file(s)
 app.use(express.static(__dirname));
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/Pages/index.html");
 });
 
 // handle users

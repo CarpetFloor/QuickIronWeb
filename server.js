@@ -24,6 +24,8 @@ io.on("connection", (socket) => {
     players.push(new Player(socket.id));
     socket.join("lobby");
 
+    // give client their id
+    socket.emit("sendId", socket.id);
     /**
      * All players are sent and sorted client-side to make sure that the server
      * only has to deal with handling games

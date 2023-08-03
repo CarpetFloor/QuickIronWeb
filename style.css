@@ -13,6 +13,17 @@ p, a, button, input {
     font-size: var(--standardFontSize);
 }
 
+::-webkit-scrollbar {
+    width: 7px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #65451F;
+    border-radius: 3px;
+}
+
 iframe {
     border: none;
     width: 100%;

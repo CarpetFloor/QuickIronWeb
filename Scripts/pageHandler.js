@@ -33,8 +33,11 @@ function showPlayers() {
     for(let i = 0; i < players.length; i++) {
         if(players[i].id != myId) {
             if(players[i].room == myRoom) {
-                let elem = iframeRef.document.createElement("p");
-                elem.innerText = players[i].name;
+                let elem = iframeRef.document.createElement("div");
+
+                let text = iframeRef.document.createElement("p");
+                text.innerText = players[i].name;
+                elem.appendChild(text);
 
                 container.appendChild(elem);
             }

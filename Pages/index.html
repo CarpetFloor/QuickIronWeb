@@ -9,13 +9,9 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <a class="menuButton" href="challenges.html">Challenges</a>
-    <a class="menuButton" href="playerBrowser.html">playerBrowser</a>
-    <a class="menuButton" href="customization.html">customization</a>
-    <a class="menuButton" href="settings.html">settinghtml</a>
-    <a class="menuButton" href="tutorial.html">tutorial</a>
-    <a class="menuButton" href="credits.html">credits</a>
+    <iframe src="/Pages/home.html" name="iframe" onload="pageLoaded(this.contentWindow.location)"></iframe>
 
-    <script src="../script.js"></script>
+    <script src="../Scripts/script.js"></script>
+    <script src="../Scripts/pageHandler.js"></script>
 </body>
 </html>

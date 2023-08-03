@@ -4,20 +4,44 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const path = require("path");
 
-// add static file(s)
+// add static file
 app.use(express.static(__dirname));
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/Pages/index.html");
 });
 
+function Player(id) {
+    this.id = id;
+    this.name = "stranger" + (players.length + 1);
+    this.room = "lobby";
+}
+let players = []
+
 // handle users
 io.on("connection", (socket) => {
-    console.log(socket.id + " connected");
+    players.push(new Player(socket.id));
+    socket.join("lobby");
+
+    /**
+     * All players are sent and sorted client-side to make sure that the server
+     * only has to deal with handling games
+     */
+    io.to("lobby").emit("sendPlayerList", players);
 
     socket.on("disconnect", () => {
-        console.log(socket.id + " disconnected");
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].id == socket.id) {                
+                players.splice(i, 1);
+                io.to("lobby").emit("sendPlayerList", players);
+
+                break;
+            }
+        }
+
     });
+
 });
 
 // start server

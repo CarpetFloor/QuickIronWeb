@@ -1,12 +1,78 @@
-body {
-    background-color: slateblue;
+@import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+
+:root {
+    --standardFontSize: 1.2em;
 }
 
-.menuButton {
-    border: 2px solid black;
-    background-color: azure;
+body {
+    /* background-color: slateblue; */
+    background-color: #C8AE7D;    ;
+}
+p, a, button, input {
+    font-family: "Neucha";
+    font-size: var(--standardFontSize);
+}
+
+iframe {
+    border: none;
+    width: 100%;
+    height: 97vh;
+    display: flex;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.menuButton, button {
+    border: none;
+    outline: none;
+    background-color: #EFEBE9;
     text-decoration: none;
     color: black;
-    font-size: 20px;
+    font-size: 1.8em;
     padding: 8px;
+    width: fit-content;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.menuButton:hover {
+    padding: 12px;
+    margin-bottom: 7px;
+    /* font-weight: bold; */
+    transition: all 0.15s;
+    text-decoration: underline;
+}
+
+/* plyaer browser */
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 450px;
+}
+.header .inputHeading {
+    font-size: 1.35em;
+    font-weight: bold;
+    margin-right: 15px;
+}
+.header input {
+    height: fit-content;
+    outline: none;
+    border: none;
+    background-color: rgba(1, 1, 1, 0);
+    border-bottom: 2px solid #65451F;
+    margin-right: 5px;
+}
+.header .inputClearButton {
+    font-size: var(--standardFontSize);
+}
+.title {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: underline;
 }

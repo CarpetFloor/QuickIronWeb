@@ -61,6 +61,11 @@ iframe {
     /* font-weight: bold; */
     transition: all 0.15s;
     text-decoration: underline;
+    cursor: pointer;
+}
+button:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 /* plyaer browser */
@@ -93,8 +98,23 @@ iframe {
     margin-bottom: 10px;
     /* text-decoration: underline; */
 }
-#playersContainer div p {
-    font-size: 1.3em;
+#playersContainer div {
+    display: flex;
+    flex-direction: row;
     margin: 0;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
+}
+#playersContainer div button {
+    font-size: 1.2em;
+    margin: 0;
+    margin-right: 15px;
+    padding: 5px;
+}
+#playersContainer div button:hover {
+    color: darkred;
+    border-color: darkred;
+}
+#playersContainer div p {
+    font-size: 1.2em;
+    padding: 0;
 }

@@ -35,6 +35,10 @@ function showPlayers() {
             if(players[i].room == myRoom) {
                 let elem = iframeRef.document.createElement("div");
 
+                let button = iframeRef.document.createElement("button");
+                button.innerText = "Challenge"
+                elem.appendChild(button);
+
                 let text = iframeRef.document.createElement("p");
                 text.innerText = players[i].name;
                 elem.appendChild(text);

@@ -6,7 +6,10 @@
 
 body {
     /* background-color: slateblue; */
-    background-color: #C8AE7D;    ;
+    background-color: #C8AE7D;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 p, a, button, input {
     font-family: "Neucha";
@@ -117,4 +120,12 @@ button:hover {
 #playersContainer div p {
     font-size: 1.2em;
     padding: 0;
+}
+#challengedNotice {
+    margin: 0;
+    padding: 0;
+    color: darkred;
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: 0;
 }

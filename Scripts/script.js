@@ -1,5 +1,7 @@
 let socket = io();
 let players = [];
+// note that players in challenges are stored as ids, but can get name through players list
+let challenges = [];
 let myId = "";
 let myIndex = -1;
 let myRoom = "";
@@ -26,3 +28,10 @@ socket.on("sendPlayerList", function(playerList) {
     console.log(myRoom);
     console.log(players);
 });
+
+socket.on("sendChallengesList", function(challengesList) {
+    challenges = challengesList;
+
+    console.log("CHALLENGES:");
+    console.log(challenges);
+})

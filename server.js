@@ -50,7 +50,8 @@ function Player(id) {
     this.name = "stranger" + getNextStrangerNum();
     this.room = "lobby";
 }
-let players = []
+let players = [];
+let challenges = [];
 
 // handle users
 io.on("connection", (socket) => {
@@ -67,6 +68,7 @@ io.on("connection", (socket) => {
     io.to("lobby").emit("sendPlayerList", players);
 
     socket.on("disconnect", () => {
+        // remove user from players list
         for(let i = 0; i < players.length; i++) {
             if(players[i].id == socket.id) {         
                 players.splice(i, 1);
@@ -76,6 +78,39 @@ io.on("connection", (socket) => {
             }
         }
 
+        let involvedInChallenge = false;
+        // remove all challenges involving user
+        for(let i = 0; i < challenges.length; i++) {
+            if(challenges[i].includes(socket.id)) {
+                challenges.splice(i, 1);
+
+                involvedInChallenge = true;
+            }
+        }
+
+        if(involvedInChallenge) {
+            io.to("lobby").emit("sendChallengesList", challenges);
+        }
+    });
+
+    socket.on("challenge", (name) => {
+        // find challenged user
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].name == name) {
+                let challenge = [];
+
+                // add player who sent challenge
+                challenge.push(socket.id);
+                // add player who recieved challenge
+                challenge.push(players[i].id);
+
+                challenges.push(challenge);
+
+                break;
+            }
+        }
+
+        io.to("lobby").emit("sendChallengesList", challenges);
     });
 
 });

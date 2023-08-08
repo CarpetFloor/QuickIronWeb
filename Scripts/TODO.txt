@@ -1,0 +1,2 @@
+-go back to the main menu button on every page
+-practice mode

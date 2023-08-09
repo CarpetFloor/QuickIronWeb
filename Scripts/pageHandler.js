@@ -12,6 +12,9 @@ function pageLoaded(src) {
     let srcSplitted = href.split("/");
     let page = srcSplitted[srcSplitted.length - 1].split(".")[0];
     
+    document.body.style.backgroundColor = "#C8AE7D";
+    iframeRef.document.body.style.backgroundColor = "#C8AE7D";
+
     switch(page) {
         case "home":
             break;
@@ -21,6 +24,13 @@ function pageLoaded(src) {
             break;
         case "challenges":
             showChallenges();
+
+            break;
+        case "practice":
+            document.body.style.backgroundColor = "black";
+            iframeRef.document.body.style.backgroundColor = "black";
+
+            startPractice();
 
             break;
         default:

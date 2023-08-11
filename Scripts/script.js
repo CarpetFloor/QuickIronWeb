@@ -1,11 +1,6 @@
 /**
  * Game Mechanics:
- * -1 shot to the head, or 2 shots anywhere else
- * -Have to cock gun before each shot
- * -Can end in a draw
- * -Have to first move mouse to gun and press a button to equip
- * -3 buttons: shoot, cock, equip
- * -Target should be decently small, making headshots definitely small
+ * -Have to complete a random 4-key sequence of arrow keys correctly before the other player
  */
 
 /**
@@ -19,7 +14,7 @@ let challenges = [];
 let myId = "";
 let myIndex = -1;
 let myRoom = "";
-const FPS = 1000 / 60;
+const FPS = Math.round(1000 / 60);
 
 socket.on("sendId", function(id) {
     myId = id;
@@ -37,11 +32,6 @@ socket.on("sendPlayerList", function(playerList) {
             break;
         }
     }
-
-    console.log(myId);
-    console.log(myIndex);
-    console.log(myRoom);
-    console.log(players);
 });
 
 socket.on("sendChallengesList", function(challengesList) {
@@ -60,9 +50,6 @@ let w = 0;
 let h = 0;
 let r;
 let gameInterval;
-let bgImage;
-let fgImage;
-let bgSize = {x: -1, y: -1};
 
 function startPractice() {
     drawBackground();

@@ -30,6 +30,12 @@ function pageLoaded(src) {
             document.body.style.backgroundColor = "black";
             iframeRef.document.body.style.backgroundColor = "black";
 
+            iframeRef.document.getElementById("practiceMainMenuButton").style.position = "absolute";
+            iframeRef.document.getElementById("practiceMainMenuButton").style.display = "none";
+            iframeRef.document.getElementById("practiceMainMenuButton").style.left = "50%";
+            iframeRef.document.getElementById("practiceMainMenuButton").style.marginTop = "75px";
+            iframeRef.document.getElementById("practiceMainMenuButton").style.transform = "translate(-50%, 0)";
+            
             startPractice();
 
             break;

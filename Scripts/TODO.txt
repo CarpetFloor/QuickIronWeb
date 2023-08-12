@@ -1,2 +1,4 @@
--go back to the main menu button on every page
--practice mode
+-Practice mode countdown at start
+-Practice mode shoot animation
+-Practice mode time shown
+-Exit practice mode

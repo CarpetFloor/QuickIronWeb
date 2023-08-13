@@ -53,15 +53,13 @@ let startTime;
 let endTime;
 
 function startPractice() {
+    drawBackground();
+    
     reset();
-
+    
     getSequence();
 
-    drawBackground();
-
-    gameInterval = window.setInterval(practice, FPS);
-    document.getElementById("iframe").contentWindow.document.addEventListener("keydown", keyDown);
-    startTime = new Date();
+    startTimer();
 }
 
 function reset() {
@@ -69,6 +67,11 @@ function reset() {
     sequenceProgress = 0;
     frame = 0
     completed = false;
+
+    timeFrame = 0;
+    secondsLeft = 3;
+    timeX = w / 4;
+    timeXvelocity = 25;
 }
 
 function getSequence() {
@@ -76,6 +79,51 @@ function getSequence() {
 
     for(let i = 0; i < sequenceLength; i++) {
         sequence.push(possible[random(0, possible.length - 1)]);
+    }
+}
+
+// stuff gets set in reset function
+let timeFrame = -1;
+let secondsLeft = -1;
+let timeX = -1;
+let timeXvelocity = -1;
+
+function startTimer() {
+    r.clearRect(0, 0, w, h);
+
+    drawPlayer();
+
+    r.fillStyle = "#F7DC6F";
+    r.font = "150px Neucha";
+    r.fillText(secondsLeft + "...", timeX, h / 2);
+    
+    if(timeFrame > FPS / 3) {
+        timeXvelocity = 10;
+    }
+
+    timeX += timeXvelocity;
+    
+    ++timeFrame;
+    let callAgain = true;
+
+    if(timeFrame == FPS) {
+        if(secondsLeft == 1) {
+            callAgain = false;
+
+            gameInterval = window.setInterval(practice, FPS);
+            document.getElementById("iframe").contentWindow.document.addEventListener("keydown", keyDown);
+            startTime = new Date();
+        }
+        else {
+            timeFrame = 0;
+            --secondsLeft;
+            timeX = w / 4;
+            timeXvelocity = 25;
+        }
+    }
+
+    if(callAgain) {
+        window.setTimeout(startTimer, FPS);
     }
 }
 
@@ -291,7 +339,7 @@ function keyDown(e) {
 function showTime() {
     let time = (endTime - startTime) / 1000;
 
-    r.font = "70px Alegreya SC";
+    r.font = "70px Neucha";
     r.fillStyle = "black";
     let text = time + "s";
     let textWidth = r.measureText(text).width;
@@ -299,6 +347,4 @@ function showTime() {
 
     // show back to main menu button
     iframeRef.document.getElementById("practiceMainMenuButton").style.display = "block";
-
-    console.log(time);
 }

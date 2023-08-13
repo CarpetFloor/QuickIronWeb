@@ -19,11 +19,15 @@ function pageLoaded(src) {
         case "home":
             break;
         case "playerBrowser":
-            showPlayers();
+            if(!(multiplayer)) {
+                showPlayers();
+            }
 
             break;
         case "challenges":
-            showChallenges();
+            if(!(multiplayer)) {
+                showChallenges();
+            }
 
             break;
         case "practice":
@@ -58,82 +62,86 @@ function pageLoaded(src) {
 }
 
 function showPlayers() {
-    if(!(updatePlayerBrowserIntervalActive)) {
-        updatePlayerBrowserIntervalActive = true;
+    if(!(multiplayer)) {
+        if(!(updatePlayerBrowserIntervalActive)) {
+            updatePlayerBrowserIntervalActive = true;
 
-        updatePlayerBrowserInterval = window.setInterval(showPlayers, 1000);
-    }
+            updatePlayerBrowserInterval = window.setInterval(showPlayers, 1000);
+        }
 
-    let container = iframeRef.document.getElementById("playersContainer");
-    
-    // clear current list
-    container.innerHTML = "";
+        let container = iframeRef.document.getElementById("playersContainer");
+        
+        // clear current list
+        container.innerHTML = "";
 
-    // add players
-    for(let i = 0; i < players.length; i++) {
-        if(players[i].id != myId) {
-            if(players[i].room == myRoom) {
-                let elem = iframeRef.document.createElement("div");
+        // add players
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].id != myId) {
+                if(players[i].room == myRoom) {
+                    let elem = iframeRef.document.createElement("div");
 
-                let button = iframeRef.document.createElement("button");
-                button.innerText = "Challenge";
-                elem.appendChild(button);
-                
-                let text = iframeRef.document.createElement("p");
-                text.innerText = players[i].name;
-                elem.appendChild(text);
-                
-                container.appendChild(elem);
-
-                button.onclick = function(){
-                    let name = button.parentNode.children[1].innerText;
-
-                    socket.emit("challenge", name);
+                    let button = iframeRef.document.createElement("button");
+                    button.innerText = "Challenge";
+                    elem.appendChild(button);
                     
-                    iframeRef.document.getElementById("challengedNotice").innerText = name + " challenged!";
+                    let text = iframeRef.document.createElement("p");
+                    text.innerText = players[i].name;
+                    elem.appendChild(text);
+                    
+                    container.appendChild(elem);
 
-                    iframeRef.document.getElementById("challengedNotice").style.opacity = 1;
+                    button.onclick = function(){
+                        let name = button.parentNode.children[1].innerText;
 
-                    window.setTimeout(function(){
-                        iframeRef.document.getElementById("challengedNotice").style.opacity = 0;
-                    }, 5000);
-                };
+                        socket.emit("challenge", name);
+                        
+                        iframeRef.document.getElementById("challengedNotice").innerText = name + " challenged!";
+
+                        iframeRef.document.getElementById("challengedNotice").style.opacity = 1;
+
+                        window.setTimeout(function(){
+                            iframeRef.document.getElementById("challengedNotice").style.opacity = 0;
+                        }, 5000);
+                    };
+                }
             }
         }
     }
 }
 
 function showChallenges() {
-    if(!(updateChallengesIntervalActive)) {
-        updateChallengesIntervalActive = true;
+    if(!(multiplayer)) {
+        if(!(updateChallengesIntervalActive)) {
+            updateChallengesIntervalActive = true;
 
-        updateChallengesInterval = window.setInterval(showChallenges, 1000);
-    }
+            updateChallengesInterval = window.setInterval(showChallenges, 1000);
+        }
 
-    let container = iframeRef.document.getElementById("playersContainer");
-    
-    // clear current list
-    container.innerHTML = "";
+        let container = iframeRef.document.getElementById("playersContainer");
+        
+        // clear current list
+        container.innerHTML = "";
 
-    // add players
-    for(let i = 0; i < challenges.length; i++) {
-        if(challenges[i].includes(myId)) {
-            // only show challenges in which the client was challenged
-            if(challenges[i][1] == myId) {
-                let elem = iframeRef.document.createElement("div");
+        // add players
+        for(let i = 0; i < challenges.length; i++) {
+            if(challenges[i].includes(myId)) {
+                // only show challenges in which the client was challenged
+                if(challenges[i][1] == myId) {
+                    let elem = iframeRef.document.createElement("div");
 
-                let button = iframeRef.document.createElement("button");
-                button.innerText = "Accept";
-                elem.appendChild(button);
-                
-                let text = iframeRef.document.createElement("p");
-                text.innerText = getName(challenges[i][1]);
-                elem.appendChild(text);
-                
-                container.appendChild(elem);
-                
-                button.onclick = function() {
-                    socket.emit("startDuel", challenges[i]);
+                    let button = iframeRef.document.createElement("button");
+                    button.innerText = "Accept";
+                    elem.appendChild(button);
+                    
+                    let text = iframeRef.document.createElement("p");
+                    text.innerText = getName(challenges[i][1]);
+                    elem.appendChild(text);
+                    
+                    container.appendChild(elem);
+                    
+                    button.onclick = function() {
+                        socket.emit("startDuel", challenges[i]);
+                    }
                 }
             }
         }

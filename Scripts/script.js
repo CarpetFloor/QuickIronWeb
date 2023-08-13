@@ -65,9 +65,12 @@ function startPractice() {
 }
 
 function reset() {
-    sequence = [];
-    sequenceProgress = 0;
+    if(!(multiplayer)) {
+        sequence = [];
+        sequenceProgress = 0;
+    }
     frame = 0
+    frameOther = 0;
     completed = false;
 
     timeFrame = 0;
@@ -217,7 +220,12 @@ function drawBackground() {
 
 let playerImage = new Image();
 playerImage.src = "../Assets/Player.png";
+
+let otherPlayerImage = new Image();
+otherPlayerImage.src = "../Assets/OtherPlayer.png";
+
 let frame = 0;
+let frameOther = 0;
 let maxFrames = 50;
 let frameSize = 640;
 let playerSpacing = 500;
@@ -258,6 +266,17 @@ function drawPlayer() {
     );
     
     // other player
+    r.drawImage(
+        otherPlayerImage, 
+        frameOther * frameSize, // clip start x
+        0, // clip start y 
+        frameSize, // clip size x
+        frameSize, // clip size y
+        (w / 2) + (playerSpacing / 2) + (playerSize / 2), // position x
+        h - originalGroundHeight - playerSize + 50, // position y
+        playerSize, // image width
+        playerSize // image height
+    );
 }
 
 let arrowSize = 100 ;

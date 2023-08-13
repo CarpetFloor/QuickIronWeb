@@ -39,6 +39,17 @@ function pageLoaded(src) {
             startPractice();
 
             break;
+        case "duel":
+            document.body.style.backgroundColor = "black";
+            iframeRef.document.body.style.backgroundColor = "black";
+
+            iframeRef.document.getElementById("duelMainMenuButton").style.position = "absolute";
+            iframeRef.document.getElementById("duelMainMenuButton").style.display = "none";
+            iframeRef.document.getElementById("duelMainMenuButton").style.left = "50%";
+            iframeRef.document.getElementById("duelMainMenuButton").style.marginTop = "75px";
+            iframeRef.document.getElementById("duelMainMenuButton").style.transform = "translate(-50%, 0)";
+
+            break;
         default:
             console.error("unknown page loaded");
     }

@@ -353,6 +353,5 @@ function showTime() {
 
 socket.on("duelHasStarted", function(sequence_){
     // load practice page because everything can be reused for multiplayer duel
-    document.getElementById("iframe").src = "../Pages/practice.html";
-    console.log("duel has started");
+    document.getElementById("iframe").src = "../Pages/duel.html";
 });

@@ -1,4 +1,2 @@
+-Reset practice mode stuff at the start
 -Practice mode countdown at start
--Practice mode shoot animation
--Practice mode time shown
--Exit practice mode

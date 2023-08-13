@@ -53,6 +53,8 @@ let startTime;
 let endTime;
 
 function startPractice() {
+    reset();
+
     getSequence();
 
     drawBackground();
@@ -60,6 +62,13 @@ function startPractice() {
     gameInterval = window.setInterval(practice, FPS);
     document.getElementById("iframe").contentWindow.document.addEventListener("keydown", keyDown);
     startTime = new Date();
+}
+
+function reset() {
+    sequence = [];
+    sequenceProgress = 0;
+    frame = 0
+    completed = false;
 }
 
 function getSequence() {

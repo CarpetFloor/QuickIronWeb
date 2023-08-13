@@ -170,15 +170,8 @@ io.on("connection", (socket) => {
         gameCreated.generateSequence();
 
         // start the game
-
-        // just need to send both players to room to recieve game started signal
-        socket.join("game");
-        // io.to(challenge[1]).join("game");
-
-        io.to("game").emit("duelHasStarted");
-
-        socket.join("lobby");
-        // io.to(challenge[1]).join("lobby");
+        io.to(String(challenge[0])).emit("duelHasStarted", gameCreated.sequence);
+        io.to(String(challenge[1])).emit("duelHasStarted", gameCreated.sequence);
     });
 
 });

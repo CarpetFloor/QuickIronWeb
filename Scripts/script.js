@@ -94,7 +94,7 @@ function startTimer() {
     drawPlayer();
 
     r.fillStyle = "#F7DC6F";
-    r.font = "150px Neucha";
+    r.font = "200px Neucha";
     r.fillText(secondsLeft + "...", timeX, h / 2);
     
     if(timeFrame > FPS / 3) {
@@ -348,3 +348,11 @@ function showTime() {
     // show back to main menu button
     iframeRef.document.getElementById("practiceMainMenuButton").style.display = "block";
 }
+
+// the following is for multiplayer duels
+
+socket.on("duelHasStarted", function(){
+    // load practice page because everything can be reused for multiplayer duel
+    document.getElementById("iframe").src = "../Pages/practice.html";
+    console.log("duel has started");
+});

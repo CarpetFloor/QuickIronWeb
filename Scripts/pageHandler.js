@@ -118,6 +118,10 @@ function showChallenges() {
                 elem.appendChild(text);
                 
                 container.appendChild(elem);
+                
+                button.onclick = function() {
+                    socket.emit("startDuel", challenges[i]);
+                }
             }
         }
     }

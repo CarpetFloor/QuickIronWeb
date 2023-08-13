@@ -12,6 +12,10 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/Pages/index.html");
 });
 
+function random(min, max) {
+    return Math.round(Math.random() * (max - min)) + min;;
+}
+
 function getNextStrangerNum() {
     if(players.length == 0) {
         return 1;
@@ -49,9 +53,29 @@ function Player(id) {
     this.id = id;
     this.name = "stranger" + getNextStrangerNum();
     this.room = "lobby";
+    this.gameIndex = -1;
 }
 let players = [];
 let challenges = [];
+let sequenceLength = 4;
+
+function Game(players_) {
+    this.startTime = null;
+    this.playersInGame = [...players_];
+    this.sequence = [];
+
+    this.generateSequence = function() {
+        // generate sequence
+        let possible = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+
+        for(let i = 0; i < sequenceLength; i++) {
+            this.sequence.push(possible[random(0, possible.length - 1)]);
+        }
+
+        this.startTime = new Date();
+    }
+}
+let games = [];
 
 // handle users
 io.on("connection", (socket) => {
@@ -111,6 +135,50 @@ io.on("connection", (socket) => {
         }
 
         io.to("lobby").emit("sendChallengesList", challenges);
+    });
+
+    socket.on("startDuel", (challenge) => {
+        // remove challenge from the list of open challenges
+        for(let i = 0; i < challenges.length; i++) {
+            if(challenges[i][0] == challenge[0] && challenges[i][1] == challenge[1]) {
+                challenges.splice(i, 1);
+
+                break;
+            }
+        }
+
+        // create game
+        let gameCreated = new Game(challenge);
+
+        // update gameIndex of players in game
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].id == challenge[0]) {
+                players[i].gameIndex = games.length - 1;
+
+                break;
+            }
+        }
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].id == challenge[1]) {
+                players[i].gameIndex = games.length - 1;
+
+                break;
+            }
+        }
+
+        // generate sequence
+        gameCreated.generateSequence();
+
+        // start the game
+
+        // just need to send both players to room to recieve game started signal
+        socket.join("game");
+        // io.to(challenge[1]).join("game");
+
+        io.to("game").emit("duelHasStarted");
+
+        socket.join("lobby");
+        // io.to(challenge[1]).join("lobby");
     });
 
 });

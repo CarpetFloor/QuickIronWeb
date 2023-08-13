@@ -53,6 +53,8 @@ let startTime;
 let endTime;
 
 function startPractice() {
+    multiplayer = false;
+    
     drawBackground();
     
     reset();
@@ -110,9 +112,14 @@ function startTimer() {
         if(secondsLeft == 1) {
             callAgain = false;
 
-            gameInterval = window.setInterval(practice, FPS);
-            document.getElementById("iframe").contentWindow.document.addEventListener("keydown", keyDown);
-            startTime = new Date();
+            if(multiplayer) {
+                let a = 5;
+            }
+            else {
+                gameInterval = window.setInterval(practice, FPS);
+                document.getElementById("iframe").contentWindow.document.addEventListener("keydown", keyDown);
+                startTime = new Date();
+            }
         }
         else {
             timeFrame = 0;
@@ -237,6 +244,7 @@ function practice() {
 }
 
 function drawPlayer() {
+    // player
     r.drawImage(
         playerImage, 
         frame * frameSize, // clip start x
@@ -248,6 +256,8 @@ function drawPlayer() {
         playerSize, // image width
         playerSize // image height
     );
+    
+    // other player
 }
 
 let arrowSize = 100 ;
@@ -351,7 +361,21 @@ function showTime() {
 
 // the following is for multiplayer duels
 
+let multiplayer = false;
+
 socket.on("duelHasStarted", function(sequence_){
-    // load practice page because everything can be reused for multiplayer duel
+    sequence = sequence_;
+    sequenceLength = sequence_.length;
+    
     document.getElementById("iframe").src = "../Pages/duel.html";
 });
+
+function startDuel() {
+    multiplayer = true;
+
+    drawBackground();
+    
+    reset();
+
+    startTimer();
+}

@@ -49,6 +49,8 @@ function pageLoaded(src) {
             iframeRef.document.getElementById("duelMainMenuButton").style.marginTop = "75px";
             iframeRef.document.getElementById("duelMainMenuButton").style.transform = "translate(-50%, 0)";
 
+            startDuel();
+
             break;
         default:
             console.error("unknown page loaded");

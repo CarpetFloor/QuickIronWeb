@@ -1,2 +1,3 @@
--Close duel when a payer leaves, and send remaining player back to main menu
+-Duel game over animtions
 -Don't allow duplicate challenges
+-Fix players sometimes not starting at the same time

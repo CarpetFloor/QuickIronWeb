@@ -7,8 +7,6 @@
  * Player frames are 640x640 px
  */
 
-let sequenceLength = 4;
-
 let socket = io();
 let players = [];
 // note that players in challenges are stored as ids, but can get name through players list
@@ -306,7 +304,7 @@ function drawArrows() {
     let totalWidth = arrowSize * sequenceLength;
     let startX = (w / 2) - (totalWidth / 2);
 
-    for(let i = 0; i < sequenceLength; i++) {
+    for(let i = 0; i < sequence.length; i++) {
         let image;
 
         switch(sequence[i]) {
@@ -343,7 +341,6 @@ function drawArrows() {
 
                 break;
         }
-
         r.drawImage(image, startX + (i * arrowSize), 200, arrowSize, arrowSize);
     }
 }
@@ -364,7 +361,7 @@ function keyDown(e) {
                 completed = true;
 
                 if(multiplayer) {
-                    socket.emit("sequenceCompleted");
+                    socket.emit("sequenceCompleted", myId);
                 }
             }
         }
@@ -393,6 +390,7 @@ function showTime() {
 let multiplayer = false;
 
 socket.on("duelHasStarted", function(sequence_){
+    multiplayer = true;
     sequence = sequence_;
     sequenceLength = sequence_.length;
     
@@ -400,8 +398,6 @@ socket.on("duelHasStarted", function(sequence_){
 });
 
 function startDuel() {
-    multiplayer = true;
-
     drawBackground();
     
     reset();
@@ -433,16 +429,18 @@ function duel() {
             
             // show back to main menu button
             let ref = document.getElementById("iframe").contentWindow;
-            ref.document.getElementById("practiceMainMenuButton").style.display = "block";
+            ref.document.getElementById("duelMainMenuButton").style.display = "block";
         }
     }
 }
 
 let won = false;
 
-socket.on("duelFinished", function() {
-    multiplayer = false;
-    won = completed;
+socket.on("duelFininshed", function(winnerId) {
+    console.log("duel finished");
+
+    won = (winnerId == myId);
+    console.log("game over, I won is", won);
     completed = true;
 });
 

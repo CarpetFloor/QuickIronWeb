@@ -194,12 +194,12 @@ io.on("connection", (socket) => {
         gameCreated.generateSequence();
 
         // start the game
-        queuePlayer(String(challenge[0]), gameCreated.sequence, false, "duelHasStarted");
-        queuePlayer(String(challenge[1]), gameCreated.sequence, true, "duelHasStarted");
+        queuePlayer(String(challenge[0]), gameCreated.sequence, false, "duelHasStarted", "");
+        queuePlayer(String(challenge[1]), gameCreated.sequence, true, "duelHasStarted", "");
         start = true;
     });
 
-    socket.on("sequenceCompleted", () => {
+    socket.on("sequenceCompleted", (playerFirstDone) => {
         // get players in challenge
         let index = -1;
 
@@ -211,8 +211,8 @@ io.on("connection", (socket) => {
         }
 
         // let players know game is over
-        queuePlayer(String(games[index].playersInGame[0]), "", false, "duelFininshed");
-        queuePlayer(String(games[index].playersInGame[1]), "", true, "duelFinished");
+        queuePlayer(String(games[index].playersInGame[0]), "", false, "duelFininshed", playerFirstDone);
+        queuePlayer(String(games[index].playersInGame[1]), "", true, "duelFinished", playerFirstDone);
         start = true;
 
         // remove game from list of active games
@@ -221,24 +221,25 @@ io.on("connection", (socket) => {
 
 });
 
-function queuePlayer(player_, sequence_, secondPlayer, emitMessage) {
+function queuePlayer(player_, sequence_, secondPlayer, emitMessage, playerFirstDone) {
     if(start) {
-        if(sequence_.length = 0) {
+        if(secondPlayer) {
+            start = false;
+        }
+
+        if(sequence_.length == 0) {
             // game over
-            io.to(player_).emit(emitMessage);
+            io.to(player_).emit(emitMessage, playerFirstDone);
         }
         else {
             // game start
             io.to(player_).emit(emitMessage, sequence_);
         }
 
-        if(secondPlayer) {
-            start = false;
-        }
     }
     else {
         setTimeout(function() {
-            queuePlayer(player_, sequence_, secondPlayer, emitMessage);
+            queuePlayer(player_, sequence_, secondPlayer, emitMessage, playerFirstDone);
         }, 10);
     }
 }

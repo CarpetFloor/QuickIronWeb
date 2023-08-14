@@ -20,6 +20,7 @@ let deathFramesPerSheet = 10;
 let deathAnimationSpritesheets = 17;
 let maxDeathFrames = deathFramesPerSheet * deathAnimationSpritesheets;
 let deathAnimations = [];
+let deathPlayerAnimations = [];
 
 // init death animation
 // split up into many small spritesheets because had issues with one large spritesheet
@@ -28,6 +29,11 @@ for(let i = 1; i <= deathAnimationSpritesheets; i++) {
     image.src = "../Assets/Death/death" + i + ".png";
 
     deathAnimations.push(image);
+
+    image = new Image();
+    image.src = "../Assets/Death/death" + i + "player.png";
+
+    deathPlayerAnimations.push(image);
 }
 
 socket.on("sendId", function(id) {
@@ -281,7 +287,17 @@ function drawPlayer() {
     if(multiplayer) {
         // player
         if(completed && !(won)) {
-            let a = 5;
+            r.drawImage(
+                deathAnimations[Math.floor(frame / deathFramesPerSheet)],
+                deathFrame * frameSize, // clip start x
+                0, // clip start y 
+                frameSize, // clip size x
+                frameSize, // clip size y
+                (w / 2) - (playerSpacing / 2) - (playerSize / 2), // position x
+                h - originalGroundHeight - playerSize + 50, // position y
+                playerSize, // image width
+                playerSize // image height
+            );
         }
         else {
             r.drawImage(
@@ -300,7 +316,7 @@ function drawPlayer() {
         // other player
         if(completed && won) {
             r.drawImage(
-                deathAnimations[Math.floor(frameOther / deathFramesPerSheet)], 
+                deathPlayerAnimations[Math.floor(frameOther / deathFramesPerSheet)], 
                 deathFrame * frameSize, // clip start x
                 0, // clip start y 
                 frameSize, // clip size x
@@ -521,6 +537,8 @@ function duel() {
     drawPlayer();
 
     if(completed) {
+        let frameCount = -1;
+
         if(won) {
             if(frame < maxFrames) {
                 ++frame;
@@ -528,13 +546,27 @@ function duel() {
             
             ++frameOther;
             ++deathFrame
+            frameCount = frameOther;
 
             if((frameOther % deathFramesPerSheet == 0) && (frameOther != 0)) {
                 deathFrame = 0;
             }
         }
+        else {
+            if(frameOther < maxFrames) {
+                ++frameOther;
+            }
+            
+            ++frame;
+            ++deathFrame;
+            frameCount = frame;
 
-        if(frameOther == maxDeathFrames) {
+            if((frame % deathFramesPerSheet == 0) && (frame != 0)) {
+                deathFrame = 0;
+            }
+        }
+
+        if(frameCount == maxDeathFrames) {
             window.clearInterval(gameInterval);
             
             // show back to main menu button

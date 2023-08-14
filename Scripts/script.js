@@ -436,7 +436,7 @@ function duel() {
 
 let won = false;
 
-socket.on("duelFininshed", function(winnerId) {
+socket.on("duelFinished", function(winnerId) {
     console.log("duel finished");
 
     won = (winnerId == myId);

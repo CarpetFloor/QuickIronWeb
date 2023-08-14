@@ -211,9 +211,11 @@ io.on("connection", (socket) => {
         }
 
         // let players know game is over
-        queuePlayer(String(games[index].playersInGame[0]), "", false, "duelFininshed", playerFirstDone);
-        queuePlayer(String(games[index].playersInGame[1]), "", true, "duelFinished", playerFirstDone);
-        start = true;
+        io.to(String(games[index].playersInGame[0])).emit("duelFinished", playerFirstDone);
+        io.to(String(games[index].playersInGame[1])).emit("duelFinished", playerFirstDone);
+        // queuePlayer(String(games[index].playersInGame[0]), "", false, "duelFininshed", playerFirstDone);
+        // queuePlayer(String(games[index].playersInGame[1]), "", true, "duelFinished", playerFirstDone);
+        // start = true;
 
         // remove game from list of active games
         games.splice(index, 1);
@@ -229,6 +231,7 @@ function queuePlayer(player_, sequence_, secondPlayer, emitMessage, playerFirstD
 
         if(sequence_.length == 0) {
             // game over
+            console.log("game over for ", player_);
             io.to(player_).emit(emitMessage, playerFirstDone);
         }
         else {

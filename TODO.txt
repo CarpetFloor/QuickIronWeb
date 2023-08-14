@@ -1,1 +1,2 @@
--Make multiplayer work
+-Close duel when a payer leaves, and send remaining player back to main menu
+-Don't allow duplicate challenges

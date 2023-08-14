@@ -93,6 +93,28 @@ io.on("connection", (socket) => {
     io.to("lobby").emit("sendPlayerList", players);
 
     socket.on("disconnect", () => {
+        // check if user was in an active duel
+        let gameIndex = -1;
+        for(let i = 0; i < games.length; i++) {
+            if(games[i].playersInGame.includes(socket.id)) {
+                gameIndex = i;
+                break;
+            }
+        }
+
+        if(gameIndex != -1) {
+            // disconnect other player
+            if(games[gameIndex].playersInGame[0] == socket.id) {
+                io.to(String(games[gameIndex].playersInGame[1])).emit("otherPlayerLeft");
+            }
+            else {
+                io.to(String(games[gameIndex].playersInGame[0])).emit("otherPlayerLeft");
+            }
+
+            // close game
+            games.splice(gameIndex, 1);
+        }
+
         // remove user from players list
         for(let i = 0; i < players.length; i++) {
             if(players[i].id == socket.id) {         
@@ -150,6 +172,7 @@ io.on("connection", (socket) => {
 
         // create game
         let gameCreated = new Game(challenge);
+        games.push(gameCreated);
 
         // update gameIndex of players in game
         for(let i = 0; i < players.length; i++) {
@@ -171,23 +194,43 @@ io.on("connection", (socket) => {
         gameCreated.generateSequence();
 
         // start the game
-        queuePlayer(String(challenge[0]), gameCreated.sequence, false);
-        queuePlayer(String(challenge[1]), gameCreated.sequence, true);
-
+        queuePlayer(String(challenge[0]), gameCreated.sequence, false, "duelHasStarted");
+        queuePlayer(String(challenge[1]), gameCreated.sequence, true, "duelHasStarted");
         start = true;
     });
 
     socket.on("sequenceCompleted", () => {
         // get players in challenge
-        for(let i = 0; i < )
+        let index = -1;
+
+        for(let i = 0; i < games.length; i++) {
+            if(games[i].playersInGame.includes(socket.id)) {
+                index = i;
+                break;
+            }
+        }
+
+        // let players know game is over
+        queuePlayer(String(games[index].playersInGame[0]), "", false, "duelFininshed");
+        queuePlayer(String(games[index].playersInGame[1]), "", true, "duelFinished");
+        start = true;
+
+        // remove game from list of active games
+        games.splice(index, 1);
     });
 
 });
 
-function queuePlayer(player_, sequence_, secondPlayer) {
+function queuePlayer(player_, sequence_, secondPlayer, emitMessage) {
     if(start) {
-        console.log("starting");
-        io.to(player_).emit("duelHasStarted", sequence_);
+        if(sequence_.length = 0) {
+            // game over
+            io.to(player_).emit(emitMessage);
+        }
+        else {
+            // game start
+            io.to(player_).emit(emitMessage, sequence_);
+        }
 
         if(secondPlayer) {
             start = false;
@@ -195,7 +238,7 @@ function queuePlayer(player_, sequence_, secondPlayer) {
     }
     else {
         setTimeout(function() {
-            queuePlayer(player_, sequence_, secondPlayer);
+            queuePlayer(player_, sequence_, secondPlayer, emitMessage);
         }, 10);
     }
 }

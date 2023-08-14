@@ -67,8 +67,8 @@ function startPractice() {
 function reset() {
     if(!(multiplayer)) {
         sequence = [];
-        sequenceProgress = 0;
     }
+    sequenceProgress = 0;
     frame = 0
     frameOther = 0;
     completed = false;
@@ -267,17 +267,19 @@ function drawPlayer() {
     );
     
     // other player
-    r.drawImage(
-        otherPlayerImage, 
-        frameOther * frameSize, // clip start x
-        0, // clip start y 
-        frameSize, // clip size x
-        frameSize, // clip size y
-        (w / 2) + (playerSpacing / 2) + (playerSize / 2), // position x
-        h - originalGroundHeight - playerSize + 50, // position y
-        playerSize, // image width
-        playerSize // image height
-    );
+    if(multiplayer) {
+        r.drawImage(
+            otherPlayerImage, 
+            frameOther * frameSize, // clip start x
+            0, // clip start y 
+            frameSize, // clip size x
+            frameSize, // clip size y
+            (w / 2) + (playerSpacing / 2) + (playerSize / 2), // position x
+            h - originalGroundHeight - playerSize + 50, // position y
+            playerSize, // image width
+            playerSize // image height
+        );
+    }
 }
 
 let arrowSize = 100 ;
@@ -361,7 +363,9 @@ function keyDown(e) {
                 window.removeEventListener("keydown", keyDown);
                 completed = true;
 
-                socket.emit("sequenceCompleted");
+                if(multiplayer) {
+                    socket.emit("sequenceCompleted");
+                }
             }
         }
         else {
@@ -380,7 +384,8 @@ function showTime() {
     r.fillText(text, (w / 2) - (textWidth / 2), h / 2);
 
     // show back to main menu button
-    iframeRef.document.getElementById("practiceMainMenuButton").style.display = "block";
+    let ref = document.getElementById("iframe").contentWindow;
+    ref.document.getElementById("practiceMainMenuButton").style.display = "block";
 }
 
 // the following is for multiplayer duels
@@ -410,4 +415,42 @@ function duel() {
     drawArrows();
 
     drawPlayer();
+
+    if(completed) {
+        let frameCount = -1;
+
+        if(won) {
+            ++frame;
+            frameCount = frame;
+        }
+        else {
+            ++frameOther;
+            frameCount = frameOther;
+        }
+
+        if(frameCount == maxFrames) {
+            window.clearInterval(gameInterval);
+            
+            // show back to main menu button
+            let ref = document.getElementById("iframe").contentWindow;
+            ref.document.getElementById("practiceMainMenuButton").style.display = "block";
+        }
+    }
 }
+
+let won = false;
+
+socket.on("duelFinished", function() {
+    multiplayer = false;
+    won = completed;
+    completed = true;
+});
+
+socket.on("otherPlayerLeft", function() {
+    multiplayer = false;
+    window.removeEventListener("keydown", keyDown);
+    window.clearInterval(gameInterval);
+
+    // go back to main menu
+    document.getElementById("iframe").src = "../Pages/home.html";
+})

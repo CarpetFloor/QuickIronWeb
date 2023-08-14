@@ -101,7 +101,7 @@ function showPlayers() {
 
                         window.setTimeout(function(){
                             iframeRef.document.getElementById("challengedNotice").style.opacity = 0;
-                        }, 5000);
+                        }, 2000);
                     };
                 }
             }

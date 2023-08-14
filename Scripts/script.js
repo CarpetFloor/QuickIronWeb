@@ -116,7 +116,8 @@ function startTimer() {
             callAgain = false;
 
             if(multiplayer) {
-                let a = 5;
+                gameInterval = window.setInterval(duel, FPS);
+                document.getElementById("iframe").contentWindow.document.addEventListener("keydown", keyDown);
             }
             else {
                 gameInterval = window.setInterval(practice, FPS);
@@ -397,4 +398,21 @@ function startDuel() {
     reset();
 
     startTimer();
+}
+
+function duel() {
+    r.clearRect(0, 0, w, h);
+
+    drawArrows();
+
+    drawPlayer();
+
+    if(completed) {
+        ++frame;
+
+        if(frame == maxFrames) {
+            window.clearInterval(gameInterval);
+            showTime();
+        }
+    }
 }

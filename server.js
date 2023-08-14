@@ -196,7 +196,7 @@ io.on("connection", (socket) => {
         // start the game
         queuePlayer(String(challenge[0]), gameCreated.sequence, false);
         queuePlayer(String(challenge[1]), gameCreated.sequence, true);
-        
+
         start = true;
     });
 
@@ -212,10 +212,21 @@ io.on("connection", (socket) => {
         }
 
         // let players know game is over
+        /**
+         * Don't really need to synchronize across players like with start, just make sure that the 
+         * defeated player recieves the emit first so that they don't try to tell the server they have 
+         * just won
+         */
+        let defeatedIndex = 0;
+        let wonIndex = 1;
 
-        // TODO emit to defeated player first
-        io.to(String(games[index].playersInGame[0])).emit("duelFinished", playerFirstDone);
-        io.to(String(games[index].playersInGame[1])).emit("duelFinished", playerFirstDone);
+        if(games[index].playersInGame[0] == playerFirstDone) {
+            defeatedIndex = 1;
+            wonIndex = 0;
+        }
+
+        io.to(String(games[index].playersInGame[defeatedIndex])).emit("duelFinished", playerFirstDone);
+        io.to(String(games[index].playersInGame[wonIndex])).emit("duelFinished", playerFirstDone);
 
         // remove game from list of active games
         games.splice(index, 1);

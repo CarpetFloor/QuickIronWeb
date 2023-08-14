@@ -194,8 +194,9 @@ io.on("connection", (socket) => {
         gameCreated.generateSequence();
 
         // start the game
-        queuePlayer(String(challenge[0]), gameCreated.sequence, false, "duelHasStarted", "");
-        queuePlayer(String(challenge[1]), gameCreated.sequence, true, "duelHasStarted", "");
+        queuePlayer(String(challenge[0]), gameCreated.sequence, false);
+        queuePlayer(String(challenge[1]), gameCreated.sequence, true);
+        
         start = true;
     });
 
@@ -211,11 +212,10 @@ io.on("connection", (socket) => {
         }
 
         // let players know game is over
+
+        // TODO emit to defeated player first
         io.to(String(games[index].playersInGame[0])).emit("duelFinished", playerFirstDone);
         io.to(String(games[index].playersInGame[1])).emit("duelFinished", playerFirstDone);
-        // queuePlayer(String(games[index].playersInGame[0]), "", false, "duelFininshed", playerFirstDone);
-        // queuePlayer(String(games[index].playersInGame[1]), "", true, "duelFinished", playerFirstDone);
-        // start = true;
 
         // remove game from list of active games
         games.splice(index, 1);
@@ -223,26 +223,17 @@ io.on("connection", (socket) => {
 
 });
 
-function queuePlayer(player_, sequence_, secondPlayer, emitMessage, playerFirstDone) {
+function queuePlayer(player_, sequence_, secondPlayer) {
     if(start) {
         if(secondPlayer) {
             start = false;
         }
 
-        if(sequence_.length == 0) {
-            // game over
-            console.log("game over for ", player_);
-            io.to(player_).emit(emitMessage, playerFirstDone);
-        }
-        else {
-            // game start
-            io.to(player_).emit(emitMessage, sequence_);
-        }
-
+        io.to(player_).emit("duelHasStarted", sequence_);
     }
     else {
         setTimeout(function() {
-            queuePlayer(player_, sequence_, secondPlayer, emitMessage, playerFirstDone);
+            queuePlayer(player_, sequence_, secondPlayer);
         }, 10);
     }
 }

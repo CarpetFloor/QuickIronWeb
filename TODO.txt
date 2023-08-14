@@ -1,3 +1,3 @@
 -Duel game over animtions
+-Fix players don't show up in player browser after completing a duel
 -Don't allow duplicate challenges
--Fix players sometimes not starting at the same time

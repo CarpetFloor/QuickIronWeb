@@ -28,6 +28,7 @@ socket.on("sendPlayerList", function(playerList) {
         if(players[i].id == myId) {
             myIndex = i;
             myRoom = players[i].room;
+            myName = players[i].name;
             
             break;
         }
@@ -40,6 +41,14 @@ socket.on("sendChallengesList", function(challengesList) {
 
 function random(min, max) {
     return Math.round(Math.random() * (max - min)) + min;;
+}
+
+function getName(id) {
+    for(let i = 0; i < players.length; i++) {
+        if(players[i].id == id) {
+            return players[i].name;
+        }
+    }
 }
 
 let c;
@@ -232,6 +241,8 @@ let playerSize = frameSize / 3;
 let originalGroundHeight = 150;
 let sequence = [];
 let completed = false;
+let myName = "";
+let otherName = "";
 
 function practice() {
     r.clearRect(0, 0, w, h);
@@ -264,20 +275,63 @@ function drawPlayer() {
         playerSize // image height
     );
     
-    // other player
     if(multiplayer) {
+        // other player
         r.drawImage(
             otherPlayerImage, 
             frameOther * frameSize, // clip start x
             0, // clip start y 
             frameSize, // clip size x
             frameSize, // clip size y
-            (w / 2) + (playerSpacing / 2) + (playerSize / 2), // position x
+            (w / 2) + (playerSpacing / 2) - (playerSize / 2), // position x
             h - originalGroundHeight - playerSize + 50, // position y
             playerSize, // image width
             playerSize // image height
         );
+
+        drawNamesText();
     }
+}
+
+function drawNamesText() {
+    let offset = 35;
+    let y = h - originalGroundHeight + 50 + offset;
+
+    r.font = "bold 20px Neucha";
+    r.fillStyle = "black";
+
+    // player name
+
+    let text = "you";
+    let textWidth = r.measureText(text).width;
+
+    r.fillText(
+        text, 
+        (w / 2) - (playerSpacing / 2)  - (textWidth / 2), 
+        y
+    );
+
+    // other player name
+    
+    text = otherName;
+    textWidth = r.measureText(text).width;
+
+    r.fillText(
+        text, 
+        (w / 2) + (playerSpacing / 2) - (textWidth / 2), 
+        y
+    );
+
+    // vs text in middle
+
+    text = "vs";
+    textWidth = r.measureText(text).width;
+
+    r.fillText(
+        text, 
+        (w / 2) - (textWidth / 2), 
+        y
+    );
 }
 
 let arrowSize = 100 ;
@@ -385,14 +439,20 @@ function showTime() {
     ref.document.getElementById("practiceMainMenuButton").style.display = "block";
 }
 
-// the following is for multiplayer duels
-
 let multiplayer = false;
 
-socket.on("duelHasStarted", function(sequence_){
+socket.on("duelHasStarted", function(sequence_, bothPlayers){
     multiplayer = true;
     sequence = sequence_;
     sequenceLength = sequence_.length;
+    
+    // get name of other player
+    if(bothPlayers[0] == myId) {
+        otherName = getName(bothPlayers[1]);
+    }
+    else {
+        otherName = getName(bothPlayers[0]);
+    }
     
     document.getElementById("iframe").src = "../Pages/duel.html";
 });

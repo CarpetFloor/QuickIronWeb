@@ -16,6 +16,20 @@ let myIndex = -1;
 let myRoom = "";
 const FPS = Math.round(1000 / 30);
 
+let deathFramesPerSheet = 10;
+let deathAnimationSpritesheets = 17;
+let maxDeathFrames = deathFramesPerSheet * deathAnimationSpritesheets;
+let deathAnimations = [];
+
+// init death animation
+// split up into many small spritesheets because had issues with one large spritesheet
+for(let i = 1; i <= deathAnimationSpritesheets; i++) {
+    let image = new Image();
+    image.src = "../Assets/Death/death" + i + ".png";
+
+    deathAnimations.push(image);
+}
+
 socket.on("sendId", function(id) {
     myId = id;
 });
@@ -78,6 +92,7 @@ function reset() {
     sequenceProgress = 0;
     frame = 0
     frameOther = 0;
+    deathFrame = 0;
     completed = false;
 
     timeFrame = 0;
@@ -89,7 +104,7 @@ function reset() {
 function getSequence() {
     let possible = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
-    for(let i = 0; i < sequenceLength; i++) {
+    for(let i = 0; i < 4; i++) {
         sequence.push(possible[random(0, possible.length - 1)]);
     }
 }
@@ -234,6 +249,7 @@ otherPlayerImage.src = "../Assets/OtherPlayer.png";
 
 let frame = 0;
 let frameOther = 0;
+let deathFrame = 0;
 let maxFrames = 50;
 let frameSize = 640;
 let playerSpacing = 500;
@@ -261,35 +277,68 @@ function practice() {
     }
 }
 
-function drawPlayer() {
-    // player
-    r.drawImage(
-        playerImage, 
-        frame * frameSize, // clip start x
-        0, // clip start y 
-        frameSize, // clip size x
-        frameSize, // clip size y
-        (w / 2) - (playerSpacing / 2) - (playerSize / 2), // position x
-        h - originalGroundHeight - playerSize + 50, // position y
-        playerSize, // image width
-        playerSize // image height
-    );
-    
+function drawPlayer() {    
     if(multiplayer) {
+        // player
+        if(completed && !(won)) {
+            let a = 5;
+        }
+        else {
+            r.drawImage(
+                playerImage, 
+                frame * frameSize, // clip start x
+                0, // clip start y 
+                frameSize, // clip size x
+                frameSize, // clip size y
+                (w / 2) - (playerSpacing / 2) - (playerSize / 2), // position x
+                h - originalGroundHeight - playerSize + 50, // position y
+                playerSize, // image width
+                playerSize // image height
+            );
+        }
+
         // other player
+        if(completed && won) {
+            r.drawImage(
+                deathAnimations[Math.floor(frameOther / deathFramesPerSheet)], 
+                deathFrame * frameSize, // clip start x
+                0, // clip start y 
+                frameSize, // clip size x
+                frameSize, // clip size y
+                (w / 2) + (playerSpacing / 2) - (playerSize / 2), // position x
+                h - originalGroundHeight - playerSize + 50, // position y
+                playerSize, // image width
+                playerSize // image height
+            );
+        }
+        else {
+            r.drawImage(
+                otherPlayerImage, 
+                frameOther * frameSize, // clip start x
+                0, // clip start y 
+                frameSize, // clip size x
+                frameSize, // clip size y
+                (w / 2) + (playerSpacing / 2) - (playerSize / 2), // position x
+                h - originalGroundHeight - playerSize + 50, // position y
+                playerSize, // image width
+                playerSize // image height
+            );
+        }
+
+        drawNamesText();
+    }
+    else {
         r.drawImage(
-            otherPlayerImage, 
-            frameOther * frameSize, // clip start x
+            playerImage, 
+            frame * frameSize, // clip start x
             0, // clip start y 
             frameSize, // clip size x
             frameSize, // clip size y
-            (w / 2) + (playerSpacing / 2) - (playerSize / 2), // position x
+            (w / 2) - (playerSpacing / 2) - (playerSize / 2), // position x
             h - originalGroundHeight - playerSize + 50, // position y
             playerSize, // image width
             playerSize // image height
         );
-
-        drawNamesText();
     }
 }
 
@@ -355,7 +404,7 @@ let arrowDownCompleted = new Image();
 arrowDownCompleted.src = "../Assets/Arrows/ArrowDownCompleted.png";
 
 function drawArrows() {
-    let totalWidth = arrowSize * sequenceLength;
+    let totalWidth = arrowSize * sequence.length;
     let startX = (w / 2) - (totalWidth / 2);
 
     for(let i = 0; i < sequence.length; i++) {
@@ -406,7 +455,7 @@ function keyDown(e) {
         if(e.key == sequence[sequenceProgress]) {
             ++sequenceProgress;
 
-            if(sequenceProgress == sequenceLength) {
+            if(sequenceProgress == sequence.length) {
                 if(!(multiplayer)) {
                     endTime = new Date();
                 }
@@ -444,7 +493,6 @@ let multiplayer = false;
 socket.on("duelHasStarted", function(sequence_, bothPlayers){
     multiplayer = true;
     sequence = sequence_;
-    sequenceLength = sequence_.length;
     
     // get name of other player
     if(bothPlayers[0] == myId) {
@@ -473,18 +521,20 @@ function duel() {
     drawPlayer();
 
     if(completed) {
-        let frameCount = -1;
-
         if(won) {
-            ++frame;
-            frameCount = frame;
-        }
-        else {
+            if(frame < maxFrames) {
+                ++frame;
+            }
+            
             ++frameOther;
-            frameCount = frameOther;
+            ++deathFrame
+
+            if((frameOther % deathFramesPerSheet == 0) && (frameOther != 0)) {
+                deathFrame = 0;
+            }
         }
 
-        if(frameCount == maxFrames) {
+        if(frameOther == maxDeathFrames) {
             window.clearInterval(gameInterval);
             
             // show back to main menu button
@@ -497,10 +547,7 @@ function duel() {
 let won = false;
 
 socket.on("duelFinished", function(winnerId) {
-    console.log("duel finished");
-
     won = (winnerId == myId);
-    console.log("game over, I won is", won);
     completed = true;
 });
 

@@ -177,6 +177,11 @@ io.on("connection", (socket) => {
         start = true;
     });
 
+    socket.on("sequenceCompleted", () => {
+        // get players in challenge
+        for(let i = 0; i < )
+    });
+
 });
 
 function queuePlayer(player_, sequence_, secondPlayer) {
@@ -191,7 +196,7 @@ function queuePlayer(player_, sequence_, secondPlayer) {
     else {
         setTimeout(function() {
             queuePlayer(player_, sequence_, secondPlayer);
-        }, 5);
+        }, 10);
     }
 }
 

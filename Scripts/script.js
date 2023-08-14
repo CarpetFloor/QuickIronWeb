@@ -354,12 +354,14 @@ function keyDown(e) {
             ++sequenceProgress;
 
             if(sequenceProgress == sequenceLength) {
-                endTime = new Date();
+                if(!(multiplayer)) {
+                    endTime = new Date();
+                }
 
                 window.removeEventListener("keydown", keyDown);
                 completed = true;
 
-                // socket.emit("sequenceCompleted");
+                socket.emit("sequenceCompleted");
             }
         }
         else {

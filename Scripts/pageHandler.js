@@ -52,6 +52,9 @@ function pageLoaded(src) {
             iframeRef.document.getElementById("duelMainMenuButton").style.left = "50%";
             iframeRef.document.getElementById("duelMainMenuButton").style.marginTop = "75px";
             iframeRef.document.getElementById("duelMainMenuButton").style.transform = "translate(-50%, 0)";
+            iframeRef.document.getElementById("duelMainMenuButton").onclick = function() {
+                location.reload();
+            }
 
             startDuel();
 

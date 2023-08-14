@@ -358,6 +358,8 @@ function keyDown(e) {
 
                 window.removeEventListener("keydown", keyDown);
                 completed = true;
+
+                // socket.emit("sequenceCompleted");
             }
         }
         else {
@@ -406,13 +408,4 @@ function duel() {
     drawArrows();
 
     drawPlayer();
-
-    if(completed) {
-        ++frame;
-
-        if(frame == maxFrames) {
-            window.clearInterval(gameInterval);
-            showTime();
-        }
-    }
 }

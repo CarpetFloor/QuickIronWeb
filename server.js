@@ -76,6 +76,7 @@ function Game(players_) {
     }
 }
 let games = [];
+let start = false;
 
 // handle users
 io.on("connection", (socket) => {
@@ -170,11 +171,29 @@ io.on("connection", (socket) => {
         gameCreated.generateSequence();
 
         // start the game
-        io.to(String(challenge[0])).emit("duelHasStarted", gameCreated.sequence);
-        io.to(String(challenge[1])).emit("duelHasStarted", gameCreated.sequence);
+        queuePlayer(String(challenge[0]), gameCreated.sequence, false);
+        queuePlayer(String(challenge[1]), gameCreated.sequence, true);
+
+        start = true;
     });
 
 });
+
+function queuePlayer(player_, sequence_, secondPlayer) {
+    if(start) {
+        console.log("starting");
+        io.to(player_).emit("duelHasStarted", sequence_);
+
+        if(secondPlayer) {
+            start = false;
+        }
+    }
+    else {
+        setTimeout(function() {
+            queuePlayer(player_, sequence_, secondPlayer);
+        }, 5);
+    }
+}
 
 // start server
 server.listen(3000, () => {

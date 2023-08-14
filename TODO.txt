@@ -1,0 +1,2 @@
+-Make sure both players start at the same time
+-Make multiplayer work

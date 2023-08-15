@@ -25,13 +25,11 @@ let deathPlayerAnimations = [];
 // init death animation
 // split up into many small spritesheets because had issues with one large spritesheet
 for(let i = 1; i <= deathAnimationSpritesheets; i++) {
-    let image = new Image();
-    image.src = "Assets/Death/death" + i + ".png";
+    let image = document.getElementById("Assets/Death/death" + i + ".png");
 
     deathAnimations.push(image);
 
-    image = new Image();
-    image.src = "Assets/Death/death" + i + "player.png";
+    image = document.getElementById("Assets/Death/death" + i + "player.png");
 
     deathPlayerAnimations.push(image);
 }
@@ -92,6 +90,18 @@ function startPractice() {
 }
 
 function reset() {
+    playerImage = document.getElementById("Assets/Player.png");
+    otherPlayerImage = document.getElementById("Assets/OtherPlayer.png");
+
+    arrowLeft = document.getElementById("Assets/Arrows/ArrowLeft.png");
+    arrowRight = document.getElementById("Assets/Arrows/ArrowRight.png");
+    arrowUp = document.getElementById("Assets/Arrows/ArrowUp.png");
+    arrowDown = document.getElementById("Assets/Arrows/ArrowDown.png");
+    arrowLeftCompleted = document.getElementById("Assets/Arrows/ArrowLeftCompleted.png");
+    arrowRightCompleted = document.getElementById("Assets/Arrows/ArrowRightCompleted.png");
+    arrowUpCompleted = document.getElementById("Assets/Arrows/ArrowUpCompleted.png");
+    arrowDownCompleted = document.getElementById("Assets/Arrows/ArrowDownCompleted.png");
+
     if(!(multiplayer)) {
         sequence = [];
     }
@@ -166,33 +176,14 @@ function startTimer() {
     }
 }
 
-let bgExtras = [];
-
-let cactus1 = new Image();
-cactus1.src = "Assets/Extras/Cactus1.png";
-bgExtras.push(cactus1)
-
-let cactus2 = new Image();
-cactus2.src = "Assets/Extras/Cactus2.png";
-bgExtras.push(cactus2)
-
-let grass1 = new Image();
-grass1.src = "Assets/Extras/Grass1.png";
-bgExtras.push(grass1)
-
-let grass2 = new Image();
-grass2.src = "Assets/Extras/Grass2.png";
-bgExtras.push(grass2)
-
-let rock1 = new Image();
-rock1.src = "Assets/Extras/Rock1.png";
-bgExtras.push(rock1)
-
-let rock2 = new Image();
-rock2.src = "Assets/Extras/Rock2.png";
-bgExtras.push(rock2)
-
 function drawBackground() {
+    let bgExtras = [];
+    bgExtras.push(document.getElementById("Assets/Extras/Cactus1.png"));
+    bgExtras.push(document.getElementById("Assets/Extras/Grass1.png"));
+    bgExtras.push(document.getElementById("Assets/Extras/Grass2.png"));
+    bgExtras.push(document.getElementById("Assets/Extras/Rock1.png"));
+    bgExtras.push(document.getElementById("Assets/Extras/Rock2.png"));
+
     c = document.getElementById("iframe").contentWindow.document.getElementById("canvas");
 
     let bgc = document.getElementById("iframe").contentWindow.document.getElementById("bgcanvas");
@@ -247,11 +238,9 @@ function drawBackground() {
     r = c.getContext("2d");
 }
 
-let playerImage = new Image();
-playerImage.src = "Assets/Player.png";
+let playerImage;
 
-let otherPlayerImage = new Image();
-otherPlayerImage.src = "Assets/OtherPlayer.png";
+let otherPlayerImage;
 
 let frame = 0;
 let frameOther = 0;
@@ -401,23 +390,15 @@ function drawNamesText() {
 
 let arrowSize = 100 ;
 
-let arrowLeft = new Image();
-arrowLeft.src = "Assets/Arrows/ArrowLeft.png";
-let arrowRight = new Image();
-arrowRight.src = "Assets/Arrows/ArrowRight.png";
-let arrowUp = new Image();
-arrowUp.src = "Assets/Arrows/ArrowUp.png";
-let arrowDown = new Image();
-arrowDown.src = "Assets/Arrows/ArrowDown.png";
+let arrowLeft;
+let arrowRight;
+let arrowUp;
+let arrowDown;
 
-let arrowLeftCompleted = new Image();
-arrowLeftCompleted.src = "Assets/Arrows/ArrowLeftCompleted.png";
-let arrowRightCompleted = new Image();
-arrowRightCompleted.src = "Assets/Arrows/ArrowRightCompleted.png";
-let arrowUpCompleted = new Image();
-arrowUpCompleted.src = "Assets/Arrows/ArrowUpCompleted.png";
-let arrowDownCompleted = new Image();
-arrowDownCompleted.src = "Assets/Arrows/ArrowDownCompleted.png";
+let arrowLeftCompleted;
+let arrowRightCompleted;
+let arrowUpCompleted;
+let arrowDownCompleted;
 
 function drawArrows() {
     let totalWidth = arrowSize * sequence.length;

@@ -4,6 +4,10 @@
     --standardFontSize: 1.2em;
 }
 
+#loadImages img {
+    display: none;
+}
+
 body {
     /* background-color: slateblue; */
     background-color: #C8AE7D;

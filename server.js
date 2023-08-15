@@ -1,9 +1,7 @@
 const express = require("express");
 const app = express();
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const path = require("path");
 
 // add static file
@@ -250,6 +248,7 @@ function queuePlayer(player_, sequence_, secondPlayer, bothPlayers) {
 }
 
 // start server
-server.listen(3000, () => {
+let port = 3000
+http.listen(process.env.PORT || port, () => {
   console.log("server started");
 });

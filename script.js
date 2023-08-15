@@ -178,11 +178,11 @@ function startTimer() {
 
 function drawBackground() {
     let bgExtras = [];
-    bgExtras.push(document.getElementById("Assets/Extras/Cactus1.png"));
-    bgExtras.push(document.getElementById("Assets/Extras/Grass1.png"));
-    bgExtras.push(document.getElementById("Assets/Extras/Grass2.png"));
-    bgExtras.push(document.getElementById("Assets/Extras/Rock1.png"));
-    bgExtras.push(document.getElementById("Assets/Extras/Rock2.png"));
+    bgExtras.push(document.getElementById("Assets/Cactus1.png"));
+    bgExtras.push(document.getElementById("Assets/Grass1.png"));
+    bgExtras.push(document.getElementById("Assets/Grass2.png"));
+    bgExtras.push(document.getElementById("Assets/Rock1.png"));
+    bgExtras.push(document.getElementById("Assets/Rock2.png"));
 
     c = document.getElementById("iframe").contentWindow.document.getElementById("canvas");
 

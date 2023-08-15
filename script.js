@@ -26,12 +26,12 @@ let deathPlayerAnimations = [];
 // split up into many small spritesheets because had issues with one large spritesheet
 for(let i = 1; i <= deathAnimationSpritesheets; i++) {
     let image = new Image();
-    image.src = "../Assets/Death/death" + i + ".png";
+    image.src = "Assets/Death/death" + i + ".png";
 
     deathAnimations.push(image);
 
     image = new Image();
-    image.src = "../Assets/Death/death" + i + "player.png";
+    image.src = "Assets/Death/death" + i + "player.png";
 
     deathPlayerAnimations.push(image);
 }
@@ -169,27 +169,27 @@ function startTimer() {
 let bgExtras = [];
 
 let cactus1 = new Image();
-cactus1.src = "../Assets/Extras/Cactus1.png";
+cactus1.src = "Assets/Extras/Cactus1.png";
 bgExtras.push(cactus1)
 
 let cactus2 = new Image();
-cactus2.src = "../Assets/Extras/Cactus2.png";
+cactus2.src = "Assets/Extras/Cactus2.png";
 bgExtras.push(cactus2)
 
 let grass1 = new Image();
-grass1.src = "../Assets/Extras/Grass1.png";
+grass1.src = "Assets/Extras/Grass1.png";
 bgExtras.push(grass1)
 
 let grass2 = new Image();
-grass2.src = "../Assets/Extras/Grass2.png";
+grass2.src = "Assets/Extras/Grass2.png";
 bgExtras.push(grass2)
 
 let rock1 = new Image();
-rock1.src = "../Assets/Extras/Rock1.png";
+rock1.src = "Assets/Extras/Rock1.png";
 bgExtras.push(rock1)
 
 let rock2 = new Image();
-rock2.src = "../Assets/Extras/Rock2.png";
+rock2.src = "Assets/Extras/Rock2.png";
 bgExtras.push(rock2)
 
 function drawBackground() {
@@ -248,10 +248,10 @@ function drawBackground() {
 }
 
 let playerImage = new Image();
-playerImage.src = "../Assets/Player.png";
+playerImage.src = "Assets/Player.png";
 
 let otherPlayerImage = new Image();
-otherPlayerImage.src = "../Assets/OtherPlayer.png";
+otherPlayerImage.src = "Assets/OtherPlayer.png";
 
 let frame = 0;
 let frameOther = 0;
@@ -402,22 +402,22 @@ function drawNamesText() {
 let arrowSize = 100 ;
 
 let arrowLeft = new Image();
-arrowLeft.src = "../Assets/Arrows/ArrowLeft.png";
+arrowLeft.src = "Assets/Arrows/ArrowLeft.png";
 let arrowRight = new Image();
-arrowRight.src = "../Assets/Arrows/ArrowRight.png";
+arrowRight.src = "Assets/Arrows/ArrowRight.png";
 let arrowUp = new Image();
-arrowUp.src = "../Assets/Arrows/ArrowUp.png";
+arrowUp.src = "Assets/Arrows/ArrowUp.png";
 let arrowDown = new Image();
-arrowDown.src = "../Assets/Arrows/ArrowDown.png";
+arrowDown.src = "Assets/Arrows/ArrowDown.png";
 
 let arrowLeftCompleted = new Image();
-arrowLeftCompleted.src = "../Assets/Arrows/ArrowLeftCompleted.png";
+arrowLeftCompleted.src = "Assets/Arrows/ArrowLeftCompleted.png";
 let arrowRightCompleted = new Image();
-arrowRightCompleted.src = "../Assets/Arrows/ArrowRightCompleted.png";
+arrowRightCompleted.src = "Assets/Arrows/ArrowRightCompleted.png";
 let arrowUpCompleted = new Image();
-arrowUpCompleted.src = "../Assets/Arrows/ArrowUpCompleted.png";
+arrowUpCompleted.src = "Assets/Arrows/ArrowUpCompleted.png";
 let arrowDownCompleted = new Image();
-arrowDownCompleted.src = "../Assets/Arrows/ArrowDownCompleted.png";
+arrowDownCompleted.src = "Assets/Arrows/ArrowDownCompleted.png";
 
 function drawArrows() {
     let totalWidth = arrowSize * sequence.length;

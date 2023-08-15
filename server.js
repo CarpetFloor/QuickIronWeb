@@ -7,7 +7,7 @@ const path = require("path");
 // add static file
 app.use(express.static(__dirname));
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/Pages/index.html");
+    res.sendFile(__dirname + "index.html");
 });
 
 function random(min, max) {
